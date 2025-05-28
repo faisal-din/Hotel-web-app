@@ -3,6 +3,7 @@ import './App.css';
 import Navbar from './Components/Navbar';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Home from './Pages/Home';
+import Footer from './Components/Footer';
 
 function App() {
   const isOwnerPath = useLocation().pathname.includes('owner');
@@ -22,6 +23,8 @@ function App() {
           <Route path='/user/signup' element={<h1>User Signup Page</h1>} />
         </Routes>
       </div>
+
+      <Footer />
     </>
   );
 }
