@@ -174,12 +174,12 @@ export const roomCommonData = [
 // User Dummy Data
 export const userDummyData = {
   _id: 'user_2unqyL4diJFP1E3pIBnasc7w8hP',
-  username: 'Great Stack',
-  email: 'user.greatstack@gmail.com',
+  username: 'Faisal Din',
+  email: 'faisal.din@gmail.com',
   image:
     'https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yeGo5UkpnSXE4TGliOFJiQ29oQVU3dXJzaHkifQ?width=160',
   role: 'hotelOwner',
-  createdAt: '2025-03-25T09:29:16.367Z',
+  createdAt: '2025-05-31T09:29:16.367Z',
   updatedAt: '2025-04-10T06:34:48.719Z',
   __v: 1,
   recentSearchedCities: ['New York'],
