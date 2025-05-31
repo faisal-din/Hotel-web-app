@@ -150,7 +150,7 @@ const Navbar = () => {
           alt='menu'
           className={` ${
             isScrolled && 'invert'
-          } h-4 transition-all duration-500`}
+          } h-4 transition-all duration-500 cursor-pointer`}
         />
       </div>
 
