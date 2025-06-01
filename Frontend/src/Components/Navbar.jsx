@@ -39,8 +39,10 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const isHomePage = location.pathname === '/';
+
   useEffect(() => {
-    if (location.pathname !== '/') {
+    if (!isHomePage) {
       setIsScrolled(true);
       return;
     } else {
@@ -91,14 +93,16 @@ const Navbar = () => {
             />
           </a>
         ))}
-        <button
-          onClick={() => navigate('/owner')}
-          className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${
-            isScrolled ? 'text-black' : 'text-white'
-          } transition-all`}
-        >
-          Dashboard
-        </button>
+        {user && (
+          <button
+            onClick={() => navigate('/owner')}
+            className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${
+              isScrolled ? 'text-black' : 'text-white'
+            } transition-all`}
+          >
+            Dashboard
+          </button>
+        )}
       </div>
 
       {/* Desktop Right */}

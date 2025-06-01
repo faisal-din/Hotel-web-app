@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import connectDB from './config/dB.js';
+import { clerkMiddleware } from '@clerk/express';
 
 // App Config
 const app = express();
@@ -11,6 +12,7 @@ connectDB();
 // Middleware
 app.use(express.json());
 app.use(cors());
+app.use(clerkMiddleware());
 
 // API Endpoints
 // app.use('/api/user', userRouter);
