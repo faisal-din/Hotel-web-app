@@ -3,6 +3,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import connectDB from './config/dB.js';
 import { clerkMiddleware } from '@clerk/express';
+import { clerkWebHooks } from './controllers/clerkWebHooks.js';
 
 // App Config
 const app = express();
@@ -15,7 +16,7 @@ app.use(cors());
 app.use(clerkMiddleware());
 
 // API Endpoints
-// app.use('/api/user', userRouter);
+app.use('/api/clerk', clerkWebHooks);
 
 app.get('/', (req, res) => {
   res.send('API is running');
