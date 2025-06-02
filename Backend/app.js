@@ -8,6 +8,7 @@ import userRouter from './routes/user.routes.js';
 import hotelRouter from './routes/hotel.routes.js';
 import connectCloudinary from './config/cloudinary.js';
 import roomRouter from './routes/room.routes.js';
+import bookingRouter from './routes/booking.routes.js';
 
 // App Config
 const app = express();
@@ -26,6 +27,7 @@ app.use('/api/clerk', clerkWebHooks);
 app.use('/api/users', userRouter);
 app.use('/api/hotels', hotelRouter);
 app.use('/api/rooms', roomRouter);
+app.use('/api/bookings', bookingRouter);
 
 app.get('/', (req, res) => {
   res.send('API is running');

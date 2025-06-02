@@ -1,12 +1,12 @@
 import express from 'express';
-import upload from '../middlewares/multer.middleware';
-import { isAuthenticated } from '../middlewares/auth.middleware';
+import upload from '../middlewares/multer.middleware.js';
+import { isAuthenticated } from '../middlewares/auth.middleware.js';
 import {
   createRoom,
   getAllRooms,
   getOwnerRooms,
   toggleRoomAvailability,
-} from '../controllers/room.controller';
+} from '../controllers/room.controller.js';
 
 const roomRouter = express.Router();
 
