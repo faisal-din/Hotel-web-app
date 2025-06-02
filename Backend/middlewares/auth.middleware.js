@@ -1,0 +1,16 @@
+import UserModel from '../models/user.model';
+
+export const isAuthenticated = async (req, res, next) => {
+  const { userId } = req.auth;
+
+  if (!userId) {
+    return res.status(401).json({ success: false, error: 'Unauthorized' });
+  } else {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    req.user = user;
+    next();
+  }
+};

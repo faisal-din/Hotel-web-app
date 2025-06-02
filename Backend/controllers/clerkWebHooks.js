@@ -18,7 +18,7 @@ export const clerkWebHooks = async (req, res) => {
 
     // Getting Data from the request body
     const { data, type } = req.body;
-
+    console.log('received webhook:', req.body);
     console.log('Event type:', type);
     console.log('User data:', data);
 
