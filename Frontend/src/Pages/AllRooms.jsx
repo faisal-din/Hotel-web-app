@@ -84,7 +84,7 @@ const AllRooms = () => {
               <p
                 onClick={() => {
                   {
-                    navigate(`/room/${room._id}`);
+                    navigate(`/rooms/${room._id}`);
                     scrollTo(0, 0);
                   }
                 }}

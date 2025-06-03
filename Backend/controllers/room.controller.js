@@ -2,37 +2,37 @@ import HotelModel from '../models/hotel.model.js';
 import RoomModel from '../models/room.model.js';
 import { v2 as cloudinary } from 'cloudinary';
 
-// API to create a new room for a hotel (POST --> /api/rooms/)
+// API to create a new room for a hotel
+// POST --> /api/rooms/create
 export const createRoom = async (req, res) => {
   try {
     const { roomType, pricePerNight, amenities } = req.body;
 
-    const hotel = await HotelModel.findById({ owner: req.auth.userId });
+    const hotel = await HotelModel.findOne({ owner: req.auth.userId });
 
     if (!hotel) {
-      return res.status(201).json({
+      return res.status(40).json({
         success: false,
         message: 'Hotel not found',
       });
     }
 
-    // upload the room image to Cloudinary
-    const uploadedImages = req.files.map(async (file) => {
-      const response = await cloudinary.uploader.upload(file.path, {
-        folder: 'rooms',
-      });
-      return response.secure_url;
-    });
-
-    // Wait for all images to be uploaded
-    const images = await Promise.all(uploadedImages);
+    // Upload images to Cloudinary
+    const uploadedImages = await Promise.all(
+      req.files.map(async (file) => {
+        const response = await cloudinary.uploader.upload(file.path, {
+          folder: 'rooms',
+        });
+        return response.secure_url;
+      })
+    );
 
     await RoomModel.create({
       hotel: hotel._id,
       roomType,
       pricePerNight: +pricePerNight,
       amenities: JSON.parse(amenities),
-      images,
+      images: uploadedImages,
     });
 
     res.status(201).json({
@@ -43,12 +43,13 @@ export const createRoom = async (req, res) => {
     console.error('Error creating room:', error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };
 
-// API to get all rooms  ( GET --> /api/rooms/)
+// API to get all rooms
+//  GET --> /api/rooms/
 export const getAllRooms = async (req, res) => {
   try {
     const rooms = await RoomModel.find({ isAvailable: true })
@@ -69,7 +70,7 @@ export const getAllRooms = async (req, res) => {
     console.log('Error Fetching Roooms', error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };
@@ -90,7 +91,7 @@ export const getOwnerRooms = async (req, res) => {
     console.log('Error Fetching Owner Roooms', error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };
@@ -123,7 +124,7 @@ export const toggleRoomAvailability = async (req, res) => {
     console.error('Error toggling room availability:', error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };

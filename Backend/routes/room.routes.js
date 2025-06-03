@@ -10,7 +10,12 @@ import {
 
 const roomRouter = express.Router();
 
-roomRouter.post('/', upload.array('images, 4'), isAuthenticated, createRoom);
+roomRouter.post(
+  '/create',
+  upload.array('images', 4),
+  isAuthenticated,
+  createRoom
+);
 
 roomRouter.get('/', getAllRooms);
 

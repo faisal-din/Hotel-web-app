@@ -42,7 +42,7 @@ export const registerHotel = async (req, res) => {
     console.error('Error registering hotel:', error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };

@@ -14,7 +14,7 @@ export const getUserData = async (req, res) => {
     console.error('Error fetching user data:', error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };

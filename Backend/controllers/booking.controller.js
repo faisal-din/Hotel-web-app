@@ -16,7 +16,7 @@ const checkAvailablity = async ({ checkInDate, checkOutDate, room }) => {
     console.log('Error Checking Availablity', error.message);
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };
@@ -41,7 +41,7 @@ export const checkAvailablityAPI = async (req, res) => {
     console.log('Error Checking Availablity', error.message);
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };
@@ -99,7 +99,7 @@ export const createBooking = async (req, res) => {
     console.log('Error Creating Booking', error.message);
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };
@@ -121,7 +121,7 @@ export const getUserBookings = async (req, res) => {
     console.log('Error Getting User Bookings', error.message);
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };
@@ -158,7 +158,7 @@ export const getHotelBookings = async (req, res) => {
     console.log('Error Getting Hotel Bookings', error.message);
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };
