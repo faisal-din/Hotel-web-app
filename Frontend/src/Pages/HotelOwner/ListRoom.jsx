@@ -1,9 +1,63 @@
-import React, { useState } from 'react';
-import { roomsDummyData } from '../../assets/assets';
+import React, { useEffect, useState } from 'react';
 import Title from '../../Components/Title';
+import { useAppContext } from '../../Context/AppContext';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const ListRoom = () => {
-  const [rooms, setRooms] = useState(roomsDummyData);
+  const [rooms, setRooms] = useState([]);
+
+  const { user, getToken } = useAppContext();
+
+  const fetchRooms = async () => {
+    try {
+      const token = await getToken();
+      const { data } = await axios.get('/api/rooms/owner', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (data.success) {
+        setRooms(data.rooms);
+      } else {
+        toast.error(data.message || 'Failed to fetch rooms');
+      }
+    } catch (error) {
+      console.error('Error fetching rooms:', error);
+      toast.error(error.message);
+    }
+  };
+
+  // Toggle Availablity of the Room
+  const toggleRoomAvailability = async (roomId) => {
+    try {
+      const token = await getToken();
+      const { data } = await axios.post(
+        `/api/rooms/toggle-availablity`,
+        { roomId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (data.success) {
+        toast.success(data.message);
+        await fetchRooms();
+      } else {
+        toast.error(data.message || 'Failed to toggle room availability');
+      }
+    } catch (error) {
+      console.error('Error toggling room availability:', error);
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchRooms();
+    }
+  }, [user]);
 
   return (
     <div>
@@ -47,6 +101,7 @@ const ListRoom = () => {
                 <td className='py-3 px-4  border-t border-gray-300 text-sm text-red-500 text-center '>
                   <label className='relative inline-flex items-center cursor-pointer text-gray-900 gap-3'>
                     <input
+                      onChange={() => toggleRoomAvailability(item._id)}
                       type='checkbox'
                       className='sr-only peer'
                       checked={item.isAvailable}

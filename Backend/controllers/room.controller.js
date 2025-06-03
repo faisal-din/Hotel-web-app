@@ -78,7 +78,7 @@ export const getAllRooms = async (req, res) => {
 // API to get all rooms for a specific hotel  ( GET --> /api/rooms/owner)
 export const getOwnerRooms = async (req, res) => {
   try {
-    const hotelData = await HotelModel({ owner: req.auth.userId });
+    const hotelData = await HotelModel.findOne({ owner: req.auth.userId });
     const rooms = await RoomModel.find({
       hotel: hotelData._id.toString(),
     }).populate('hotel');
@@ -88,7 +88,7 @@ export const getOwnerRooms = async (req, res) => {
       rooms,
     });
   } catch (error) {
-    console.log('Error Fetching Owner Roooms', error);
+    console.log('Error Fetching Owner Rooms', error);
     res.status(500).json({
       success: false,
       message: error.message,
@@ -96,15 +96,16 @@ export const getOwnerRooms = async (req, res) => {
   }
 };
 
-// API to toggle room availability ( GET --> /api/rooms/toggle-availablity)
+// API to toggle room availability
+//  POST --> /api/rooms/toggle-availablity
 export const toggleRoomAvailability = async (req, res) => {
   try {
     const { roomId } = req.body;
 
     // Find the room by ID
-    const roomData = await RoomModel.findById(roomId);
+    const room = await RoomModel.findById(roomId);
 
-    if (!roomData) {
+    if (!room) {
       return res.status(404).json({
         success: false,
         message: 'Room not found',
@@ -112,7 +113,7 @@ export const toggleRoomAvailability = async (req, res) => {
     }
 
     // Update the availability status
-    roomData.isAvailable = !roomData.isAvailable;
+    room.isAvailable = !room.isAvailable;
     await room.save();
 
     res.status(200).json({

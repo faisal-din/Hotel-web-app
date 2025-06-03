@@ -21,6 +21,6 @@ roomRouter.get('/', getAllRooms);
 
 roomRouter.get('/owner', isAuthenticated, getOwnerRooms);
 
-roomRouter.get('/toggle-availablity', isAuthenticated, toggleRoomAvailability);
+roomRouter.post('/toggle-availablity', isAuthenticated, toggleRoomAvailability);
 
 export default roomRouter;
