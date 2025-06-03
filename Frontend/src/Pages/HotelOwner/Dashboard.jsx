@@ -1,9 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Title from '../../Components/Title';
-import { assets, dashboardDummyData } from '../../assets/assets';
+import { assets } from '../../assets/assets';
+import { useAppContext } from '../../Context/AppContext';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { data } from 'react-router-dom';
 
 const Dashboard = () => {
-  const [dashboardData, setDashboardData] = useState(dashboardDummyData);
+  const { user, getToken, currency } = useAppContext();
+
+  const [dashboardData, setDashboardData] = useState({
+    bookings: [],
+    totalBookings: 0,
+    totalRevenue: 0,
+  });
+
+  const fetchDashboardData = async () => {
+    try {
+      const token = await getToken();
+      const { data } = await axios.get('/api/bookings/hotel', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (data.success) {
+        setDashboardData(data.dashboardData);
+      } else {
+        toast.error(data.message || 'Failed to fetch dashboard data');
+      }
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, [user]);
+
   return (
     <div>
       <Title
@@ -30,7 +65,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* --------- Total Bookings --------- */}
+        {/* --------- Total Revenue --------- */}
         <div className='bg-[#2563eb]/20 border border-[#2563eb]/10 rounded flex p-4 pr-8'>
           <img
             src={assets.totalRevenueIcon}
@@ -40,7 +75,7 @@ const Dashboard = () => {
           <div className='flex flex-col sm:ml-4 font-medium '>
             <p className='text-blue-500 text-lg'>Total Revenue</p>
             <p className='text-neutral-400 text-base'>
-              {dashboardData.totalRevenue}
+              {currency} {dashboardData.totalRevenue}
             </p>
           </div>
         </div>
@@ -77,7 +112,8 @@ const Dashboard = () => {
                   {item.room.roomType}
                 </td>
                 <td className='py-3 px-4 text-gray-800 border-t border-gray-300 text-center '>
-                  ${item.totalPrice}
+                  {currency}
+                  {item.totalPrice}
                 </td>
                 <td className='py-3 px-4 text-gray-800 border-t border-gray-300 text-center '>
                   <button

@@ -13,8 +13,8 @@ bookingRouter.post('check-availablity', checkAvailablityAPI);
 
 bookingRouter.post('/book', isAuthenticated, createBooking);
 
-bookingRouter.post('/user', isAuthenticated, getUserBookings);
+bookingRouter.get('/user', isAuthenticated, getUserBookings);
 
-bookingRouter.post('/hotel', isAuthenticated, getHotelBookings);
+bookingRouter.get('/hotel', isAuthenticated, getHotelBookings);
 
 export default bookingRouter;
