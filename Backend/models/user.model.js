@@ -25,7 +25,7 @@ const userSchema = mongoose.Schema(
       enum: ['user', 'hotelOwner'],
       default: 'user',
     },
-    recentSearchCities: [
+    recentSearchedCities: [
       {
         type: String,
         required: true,

@@ -4,6 +4,6 @@ import { registerHotel } from '../controllers/hotel.controller.js';
 
 const hotelRouter = express.Router();
 
-hotelRouter.post('/', isAuthenticated, registerHotel);
+hotelRouter.post('/register', isAuthenticated, registerHotel);
 
 export default hotelRouter;

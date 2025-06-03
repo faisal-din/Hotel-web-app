@@ -23,7 +23,7 @@ const hotelSchema = new mongoose.Schema(
       trim: true,
     },
     owner: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: 'User',
       required: true,
     },
