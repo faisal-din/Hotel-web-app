@@ -35,7 +35,8 @@ export const storeRecentSearchedcities = async (req, res) => {
     await user.save();
     res.status(200).json({
       success: true,
-      message: 'City added',
+      message: 'City added to recent searches ',
+      searchedCities: user.recentSearchedCities,
     });
   } catch (error) {
     console.error('Error storing recent searched city:', error);

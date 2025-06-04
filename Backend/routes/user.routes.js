@@ -9,7 +9,7 @@ const userRouter = express.Router();
 
 userRouter.get('/', isAuthenticated, getUserData);
 
-userRouter.get(
+userRouter.post(
   '/store-recent-search',
   isAuthenticated,
   storeRecentSearchedcities

@@ -1,6 +1,5 @@
-import React, { use } from 'react';
+import React from 'react';
 import HotelCard from './HotelCard';
-import { roomsDummyData } from '../assets/assets';
 import Title from './Title';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../Context/AppContext';

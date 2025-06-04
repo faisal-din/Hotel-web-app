@@ -9,7 +9,7 @@ import { isAuthenticated } from '../middlewares/auth.middleware.js';
 
 const bookingRouter = express.Router();
 
-bookingRouter.post('check-availablity', checkAvailablityAPI);
+bookingRouter.post('/check-availablity', checkAvailablityAPI);
 
 bookingRouter.post('/book', isAuthenticated, createBooking);
 

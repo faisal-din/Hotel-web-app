@@ -4,7 +4,6 @@ import { assets } from '../../assets/assets';
 import { useAppContext } from '../../Context/AppContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { data } from 'react-router-dom';
 
 const Dashboard = () => {
   const { user, getToken, currency } = useAppContext();
@@ -31,7 +30,7 @@ const Dashboard = () => {
       }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 

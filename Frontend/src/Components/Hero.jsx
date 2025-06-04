@@ -1,7 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { assets, cities } from '../assets/assets';
+import { useAppContext } from '../Context/AppContext';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const Hero = () => {
+  const { getToken, setSearchedCities } = useAppContext();
+
+  const [destination, setDestination] = useState('');
+
+  const navigate = useNavigate();
+
+  const onSearchHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      navigate(`/rooms?destination=${destination}`);
+
+      const token = await getToken();
+
+      const { data } = await axios.post(
+        '/api/users/store-recent-search',
+        { recentSearchedCity: destination },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setSearchedCities((prevSearchedCity) => {
+        const updatedSearchedCity = [...prevSearchedCity, destination];
+
+        if (prevSearchedCity.length > 3) {
+          updatedSearchedCity.shift();
+        }
+        return updatedSearchedCity;
+      });
+    } catch (error) {
+      console.error(
+        'Error during search:',
+        error.response?.data || error.message
+      );
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
+
   return (
     <div className='flex flex-col items-start justify-center px-6 md:px-16 1g:px-24 xl:px-32 text-white bg-[url("/src/assets/heroImage.png")] big-no-repeat bg-cover bg-center h-screen'>
       <p className='bg-[#49B9FF]/50 px-3.5 py-1 rounded-full mt-20'>
@@ -15,13 +59,18 @@ const Hero = () => {
         hotels and resorts. Start your journey today.
       </p>
 
-      <form className='bg-white text-gray-500 rounded-lg px-6 py-4 mt-8 flex flex-col md:flex-row max-md:items-start gap-4 max-md:mx-auto'>
+      <form
+        onSubmit={onSearchHandler}
+        className='bg-white text-gray-500 rounded-lg px-6 py-4 mt-8 flex flex-col md:flex-row max-md:items-start gap-4 max-md:mx-auto'
+      >
         <div>
           <div className='flex items-center gap-2'>
             <img src={assets.calenderIcon} alt='calenderIcon' className='h-4' />
             <label htmlFor='destinationInput'>Destination</label>
           </div>
           <input
+            onChange={(e) => setDestination(e.target.value)}
+            value={destination}
             list='destinations'
             id='destinationInput'
             type='text'

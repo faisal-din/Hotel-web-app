@@ -44,7 +44,6 @@ const AddRoom = () => {
     }
 
     setLoading(true);
-
     try {
       const formData = new FormData();
       formData.append('roomType', inputs.roomType);
@@ -71,8 +70,6 @@ const AddRoom = () => {
         },
       });
 
-      console.log('room create data', data);
-
       if (data.success) {
         toast.success(data.message || 'Room added successfully');
         // Reset form inputs and images
@@ -98,7 +95,7 @@ const AddRoom = () => {
       }
     } catch (error) {
       console.error('Error adding room:', error.response);
-      toast.error(error.message || 'An error adding the room');
+      toast.error(error.response?.data?.message || error.message);
     } finally {
       setLoading(false);
     }

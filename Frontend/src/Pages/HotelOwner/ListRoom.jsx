@@ -49,7 +49,7 @@ const ListRoom = () => {
       }
     } catch (error) {
       console.error('Error toggling room availability:', error);
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 

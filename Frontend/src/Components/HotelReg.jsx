@@ -41,7 +41,7 @@ const HotelReg = () => {
       }
     } catch (error) {
       console.error('Error hotel registration:', error);
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 

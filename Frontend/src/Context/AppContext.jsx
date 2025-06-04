@@ -39,7 +39,7 @@ export const AppProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Error fetching user:', error);
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 
@@ -54,7 +54,7 @@ export const AppProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Error fetching rooms:', error);
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 
