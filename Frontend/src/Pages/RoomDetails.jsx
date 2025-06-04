@@ -17,7 +17,7 @@ const RoomDetails = () => {
   const [guests, setGuests] = useState(1);
   const [isAvailable, setIsAvailable] = useState(false);
 
-  const { rooms, getToken, currency } = useAppContext();
+  const { rooms, getToken } = useAppContext();
 
   // Check if the Room is Available
   const checkAvailablity = async () => {
@@ -34,7 +34,6 @@ const RoomDetails = () => {
         checkOutDate,
       });
 
-      console.log('Check Availability Response:', data);
       if (data.success) {
         if (data.isAvailable) {
           setIsAvailable(true);

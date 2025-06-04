@@ -183,7 +183,8 @@ const AllRooms = () => {
                 }}
                 className='text-gray-800 text-3xl font-playfair cursor-pointer'
               >
-                {room.hotel.name}
+                {room.hotel.name}{' '}
+                <span className='font-inter text-sm'>({room.roomType})</span>
               </p>
               <div className='flex items-center'>
                 <StarRating />

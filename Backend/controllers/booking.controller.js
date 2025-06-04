@@ -1,6 +1,7 @@
 import RoomModel from '../models/room.model.js';
 import BookingModel from '../models/bookings.model.js';
 import HotelModel from '../models/hotel.model.js';
+import transporter from '../config/nodemailer.js';
 
 // Function to Check Availablity of Room
 const checkAvailablity = async ({ checkInDate, checkOutDate, room }) => {
@@ -70,8 +71,8 @@ export const createBooking = async (req, res) => {
     }
 
     // Get total price from the room details
-    const roomDetails = await RoomModel.findById(room);
-    const totalPrice = roomDetails.pricePerNight;
+    const roomData = await RoomModel.findById(room).populate('hotel');
+    const totalPrice = roomData.pricePerNight;
 
     // Calculate totalPrice based on nights
     const checkIn = new Date(checkInDate);
@@ -85,17 +86,71 @@ export const createBooking = async (req, res) => {
     const booking = await BookingModel.create({
       user,
       room,
-      hotel: roomDetails.hotel,
+      hotel: roomData.hotel._id,
       guests: +guests,
       checkInDate,
       checkOutDate,
       totalPrice: totalBookingPrice,
     });
 
-    res.status(201).json({
-      success: true,
-      booking,
-    });
+    // Format date for email
+    const formatDate = (date) => {
+      return new Date(date).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+    };
+
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: req.user.email,
+      subject: 'Hotel Booking Details',
+      html: `
+      <h2>Your Booking Details</h2>
+      <p>Dear ${req.user.username},</p>
+     <p>Thank you for your booking! Here are your details:</p>
+     <ul>
+        <li><strong>Booking ID: </strong> ${booking._id}</li>
+        <li><strong>Hotel Name: </strong> ${roomData.hotel.name}</li>
+        <li><strong>Location: </strong> ${roomData.hotel.address}</li>
+        <li><strong>Check-In-Date: </strong> ${formatDate(
+          booking.checkInDate
+        )}</li>
+        <li><strong>Check-Out-Date: </strong> ${formatDate(
+          booking.checkOutDate
+        )}</li>
+        <li><strong>Booking Amount: </strong> $${
+          booking.totalPrice
+        }   /night</li>
+     </ul>
+     <p>We look forward to welcoming you!</p>
+     <p>If you need to make any changes, feel free to contact us.</p>
+      
+      `,
+    };
+
+    // Send email to user
+    try {
+      await transporter.sendMail(mailOptions);
+
+      return res.status(201).json({
+        success: true,
+        message: 'Booking created successfully and email sent',
+        booking,
+      });
+    } catch (emailError) {
+      console.error('Email sending failed:', emailError.message);
+
+      // Still return success since booking was created
+      return res.status(201).json({
+        success: true,
+        message:
+          'Booking created successfully! (Confirmation email failed to send)',
+        booking,
+      });
+    }
   } catch (error) {
     console.log('Error Creating Booking', error);
     res.status(500).json({
