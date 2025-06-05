@@ -44,18 +44,12 @@ export const clerkWebHooks = async (req, res) => {
           username: data.first_name + ' ' + data.last_name,
           image: data.image_url,
         };
-        await UserModel.findOneAndUpdate(data.id, userData);
+        await UserModel.findByIdAndUpdate(data.id, userData);
         break;
       }
 
       case 'user.deleted': {
-        const userData = {
-          _id: data.id,
-          email: data.email_addresses[0].email_address,
-          username: data.first_name + ' ' + data.last_name,
-          image: data.image_url,
-        };
-        await UserModel.findOneAndDelete(data.id, userData);
+        await UserModel.findByIdAndDelete(data.id);
         break;
       }
 
@@ -72,7 +66,7 @@ export const clerkWebHooks = async (req, res) => {
     console.error('Error handling Clerk webhook:', error.message);
     return res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };

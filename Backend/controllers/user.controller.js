@@ -42,7 +42,7 @@ export const storeRecentSearchedcities = async (req, res) => {
     console.error('Error storing recent searched city:', error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };

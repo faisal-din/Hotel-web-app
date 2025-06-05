@@ -28,6 +28,8 @@ export const AppProvider = ({ children }) => {
         },
       });
 
+      console.log('User data:', data);
+
       if (data.success) {
         setIsOwner(data.role === 'hotelOwner');
         setSearchedCities(data.recentSearchedCities);
@@ -38,7 +40,10 @@ export const AppProvider = ({ children }) => {
         }, 5000);
       }
     } catch (error) {
-      console.error('Error fetching user:', error);
+      console.error(
+        'Error fetching user:',
+        error.response?.data || error.message
+      );
       toast.error(error.response?.data?.message || error.message);
     }
   };
