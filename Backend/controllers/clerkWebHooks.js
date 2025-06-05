@@ -18,30 +18,46 @@ export const clerkWebHooks = async (req, res) => {
 
     // Getting Data from the request body
     const { data, type } = req.body;
-    console.log('received webhook:', req.body);
-    console.log('Event type:', type);
-    console.log('User data:', data);
-
-    const userData = {
-      _id: data.id,
-      email: data.email_addresses[0].email_address,
-      username: data.first_name + ' ' + data.last_name,
-      image: data.image_url,
-    };
-
+    if (!data || !type) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid webhook payload',
+      });
+    }
     // Handle different webhook events
     switch (type) {
-      case 'user.created':
+      case 'user.created': {
+        const userData = {
+          _id: data.id,
+          email: data.email_addresses[0].email_address,
+          username: data.first_name + ' ' + data.last_name,
+          image: data.image_url,
+        };
         await UserModel.create(userData);
         break;
+      }
 
-      case 'user.updated':
-        await UserModel.findOneAndUpdate({ _id: data.id }, userData);
+      case 'user.updated': {
+        const userData = {
+          _id: data.id,
+          email: data.email_addresses[0].email_address,
+          username: data.first_name + ' ' + data.last_name,
+          image: data.image_url,
+        };
+        await UserModel.findOneAndUpdate(data.id, userData);
         break;
+      }
 
-      case 'user.deleted':
-        await UserModel.findOneAndDelete({ _id: data.id });
+      case 'user.deleted': {
+        const userData = {
+          _id: data.id,
+          email: data.email_addresses[0].email_address,
+          username: data.first_name + ' ' + data.last_name,
+          image: data.image_url,
+        };
+        await UserModel.findOneAndDelete(data.id, userData);
         break;
+      }
 
       default:
         break;
